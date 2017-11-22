@@ -221,7 +221,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     _createClass(Calculator, [{
         key: "add",
         value: function add(numberX, numberY) {
-            console.error("Powinieneś zaimplementować tą metodę w klasie dziedziczącej. ");
+
             return [0, 0, 0, 0, 0, 0, 0, 0];
         }
 
@@ -231,18 +231,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
     }, {
         key: "changeNumber",
-        value: function changeNumber(root) {
-            console.error("Powinieneś zaimplementować tą metodę w klasie dziedziczącej. ");
-        }
+        value: function changeNumber(root) {}
 
         /* Abstract method changing Result
         */
 
     }, {
         key: "updateResult",
-        value: function updateResult() {
-            console.error("Powinieneś zaimplementować tą metodę w klasie dziedziczącej. ");
-        }
+        value: function updateResult() {}
 
         /* Get the name of calculator selector
         *  @return {string}
@@ -330,6 +326,11 @@ var DecCalculator = function (_Calculator) {
         return _this;
     }
 
+    /* Abstract method changing number
+       *  @param {jQuery element} root Parent element
+       */
+
+
     _createClass(DecCalculator, [{
         key: 'changeNumber',
         value: function changeNumber(root) {
@@ -344,57 +345,53 @@ var DecCalculator = function (_Calculator) {
             var _this2 = this;
 
             _get(DecCalculator.prototype.__proto__ || Object.getPrototypeOf(DecCalculator.prototype), 'initEvents', this).call(this);
-
-            var btn = this.$calculatorDOMElement.find('.operator-bar span');
-            btn.on('click', function (event) {
-                console.log(_this2 + ', ' + event);
-                _this2.checkNumber();
+            this.$calculatorDOMElement.find(".operator-bar").find("span").on('click', function (event) {
+                _get(DecCalculator.prototype.__proto__ || Object.getPrototypeOf(DecCalculator.prototype), 'checkNumber', _this2).call(_this2);
                 _this2.updateResult();
             });
         }
+    }, {
+        key: 'checkNumber',
+        value: function checkNumber() {
+            _get(DecCalculator.prototype.__proto__ || Object.getPrototypeOf(DecCalculator.prototype), 'checkNumber', this).call(this);
+        }
 
-        // checkNumber() {
-        //     super.checkNumber();
-        //
-        // }
+        /* Abstract method add numbers in two array
+        *  @param {array} numberX First number
+        *  @param {array} numberY Second number
+        *  @return {array}
+        */
 
     }, {
         key: 'add',
         value: function add(numberX, numberY) {
             var result = [0, 0, 0, 0, 0, 0, 0, 0, 0];
             for (var i = numberX.length - 1; i >= 0; i--) {
-                var carryBit = numberX[i] + numberY[i] + result[i];
-                if (carryBit === 2) {
-                    result[i] = 0;
-                    result[i - 1] = 1;
-                } else if (carryBit === 3) {
-                    result[i] = 1;
-                    result[i - 1] = 1;
+                if (Number.isInteger(numberX[i]) && Number.isInteger(numberY[i]) && numberX[i] < 10 && numberY[i] < 10) {
+                    var carryBit = numberX[i] + numberY[i] + result[i];
+                    if (carryBit >= 10) {
+                        result[i] = carryBit - 10;
+                        result[i - 1]++;
+                    } else {
+                        result[i] = carryBit;
+                    }
                 } else {
-                    result[i] = carryBit;
+                    alert("Możesz wpisać tylko i wyłącznie cyfry, jedna w pojedynczym okienku");
                 }
             }
             return result;
         }
-    }, {
-        key: 'updateResult',
-        value: function updateResult() {}
 
-        /* Method changing Result
-        */
+        // Method changing Result
 
     }, {
         key: 'updateResult',
         value: function updateResult() {
             var root = this.$calculatorDOMElement;
             var $resultNumber = root.children(".group-number").children(".result-bit");
+
             for (var i = this.resultNumberArray.length - 1, j = 0; i >= 0; i--, j++) {
-                var valueResult = parseInt($resultNumber.eq(j).find(".active").text());
-                if (this.resultNumberArray[i] != valueResult) {
-                    var activeElement = $resultNumber.eq(j).find(".active").removeClass("active");
-                    activeElement.siblings().addClass("active");
-                    $resultNumber.eq(j).children(":first-child").slideToggle();
-                }
+                $resultNumber.eq(i).find(".active").text(this.resultNumberArray[j]);
             }
         }
     }]);

@@ -15,7 +15,7 @@
    *  @return {array}
    */
    add(numberX, numberY) {
-       console.error("Powinieneś zaimplementować tą metodę w klasie dziedziczącej. ");
+
        return [0,0,0,0,0,0,0,0];
    }
 
@@ -23,13 +23,13 @@
    *  @param {jQuery element} root Parent element
    */
    changeNumber(root) {
-       console.error("Powinieneś zaimplementować tą metodę w klasie dziedziczącej. ");
+
    }
 
    /* Abstract method changing Result
    */
    updateResult() {
-       console.error("Powinieneś zaimplementować tą metodę w klasie dziedziczącej. ");
+
    }
 
    /* Get the name of calculator selector
